@@ -13,7 +13,8 @@ Example 1
 denominations = [5, 10, 25, 100, 200]
 targetMoney = 94
 output = false
-Every denomination is a multiple of 5, so you can't receive exactly 94 units of money in this currency.
+Every denomination is a multiple of 5,
+ so you can't receive exactly 94 units of money in this currency.
 Example 2
 denominations = [4, 17, 29]
 targetMoney = 75
