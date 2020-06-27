@@ -13,73 +13,85 @@ public class QueueRemovals {
  		//Reducing the list
  		List<Integer> items = new ArrayList<Integer>();
  		
- 		int index = 1;
- 		int savedBig = -1;
- 		int savedPos = -1;
-
- 		 		
- 		//Sizing the array only need
- 		size = arr.length >= size ? size : arr.length - 1;
-		
-		int[] newArray = new int[size];;
+ 		//int newSize = Integer.min(size, arr.length);
+ 		int posToCheck = size - (arr.length - (intR+1));
+ 		int x = savedList.size() - intR;
  		
- 		for(int val : arr) {
- 			
- 			//Should removed the biggest element
-			if(index > size) {
-				break;
-			}
- 			
- 			items.add(val);
- 				
-			//Save the biggest element
-			if(val > savedBig ) {
-				savedBig = val;
-				savedPos = index;
-			}
- 				
- 			index++;
+ 		boolean l = false;
+ 		
+ 		if(x >= size) {
+ 			l = true;
  		}
  		
- 		System.out.println("Maior-> " + savedBig);
+ 		//System.out.println(posToCheck);
  		
- 		//Recreating the array;
+ 		int savBigVal = -1;
+ 		int itemRem = -1;
  		
- 		newArray[intR] = this.savedList.get(savedBig)+1;
- 		if (arr.length > size) {
- 			items.remove(this.savedList.get(savedBig));
+ 		boolean p = false;
+ 		
+ 		for(int item = 0; item < arr.length; item++) {
+ 			int value = arr[item];
+ 			
+ 			if(item == size) {
+ 				break;
+ 			}
+ 			
+ 			items.add(value);
+ 			
+ 			
+ 			if(l) {
+ 				if(value > savBigVal    ) {
+ 					savBigVal = value;
+ 					itemRem = value;
+ 				}
+ 				
+ 			}else {
+ 				if(item >= posToCheck && value > savBigVal   ) {
+ 					savBigVal = value ;
+ 					itemRem = savBigVal;
+ 					p = true;
+ 				}
+ 				
+ 			}
+ 			
+ 			
+ 			
  		}
  		
- 		//
- 		index = 0;
+ 		if(p) {
+ 			savBigVal += intR;
+ 		}
+ 		
+ 		//Creating new Array
+ 		int[] nArray = new int[size];
+ 		nArray[intR] = this.savedList.indexOf(savBigVal)+1;
+ 		items.remove(items.indexOf(itemRem));
+ 		
+ 		
+ 		int index = 0;
  		int offSet = 0;
  		
  		for(int iVal : items) {
- 			
- 			if(index == savedPos) {
- 				index++;
- 	 			offSet++;
- 	 			continue;
- 			}
  			
  			if(index == intR) {
  				offSet = index + 1;
  			}
  			
  			if(offSet > intR) {
- 				newArray[offSet] = iVal > 0? iVal-1 : iVal;
+ 				nArray[offSet] = iVal > 0? iVal-1 : iVal;
  				
  			}else {
- 				newArray[offSet] = iVal;
+ 				nArray[offSet] = arr[index];
  			}
-	 			
-			index++;
+
  			offSet++;
- 			
+ 			index++;
+ 		
  		}
  		
+ 		return nArray;
  		
- 		return newArray;
  		
  	}
 	
@@ -93,9 +105,10 @@ public class QueueRemovals {
 		
 		// Write your code here
 		int[] tempArray = arr;
+		
 		for(int i=0; i<x; i++) {
 			tempArray = getResizedList(tempArray,x,i);
-			System.out.println(Arrays.toString(tempArray));
+			System.out.println(i+1+ "-> " + Arrays.toString(tempArray));
 		}
 		
 		return tempArray;
