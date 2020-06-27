@@ -4,109 +4,102 @@ import java.io.*;
 import java.util.*;
 
 public class QueueRemovals {
+	
+	List<Integer> savedList = new ArrayList<Integer>();
+	
+	
+ 	int[] getResizedList(int[] arr, int size, int intR) {
+ 		
+ 		//Reducing the list
+ 		List<Integer> items = new ArrayList<Integer>();
+ 		
+ 		int index = 1;
+ 		int savedBig = -1;
+ 		int savedPos = -1;
 
-	// Add any helper functions you may need here
-	private int[] popElements(int[] arr, int x) {
+ 		 		
+ 		//Sizing the array only need
+ 		size = arr.length >= size ? size : arr.length - 1;
 		
-		int[] arrRemoved = new int[x];
-		
-		//New size of the array
-		for(int i = 0; i < x ;i++) {
-			arrRemoved[i] = arr[i];
-		}
-		
-		//Mark item for removal
-		int largest = - 1;
-		for(int val : arrRemoved) {
-			if(val > largest) {
-				largest = val;
-			}			
-		}
-		
-		//Remove the largest item
-		int[] newArray;
-		if(largest != -1) {
-			newArray = new int[x-1];
-			for (int i = 0; i < arrRemoved.length ; i++) {
-				if(arrRemoved[i] != largest) {
-					newArray[i] = arrRemoved[i];
-				}
+		int[] newArray = new int[size];;
+ 		
+ 		for(int val : arr) {
+ 			
+ 			//Should removed the biggest element
+			if(index > size) {
+				break;
 			}
-			
-		}else {
-			newArray = arrRemoved;
-		}
-		
-		//Update the remains values subtract one
-		for(int i = 0; i < newArray.length;i++) {
-			if(newArray[i]-1 > 0 ) {
-				newArray[i] = newArray[i]-1;
+ 			
+ 			items.add(val);
+ 				
+			//Save the biggest element
+			if(val > savedBig ) {
+				savedBig = val;
+				savedPos = index;
 			}
-		}
-		
-		int index = 0;
-		for(int i = arr.length; i > x ; i --) {
-			arrRemoved[index] = arr[i-1];
+ 				
+ 			index++;
+ 		}
+ 		
+ 		System.out.println("Maior-> " + savedBig);
+ 		
+ 		//Recreating the array;
+ 		
+ 		newArray[intR] = this.savedList.get(savedBig)+1;
+ 		if (arr.length > size) {
+ 			items.remove(this.savedList.get(savedBig));
+ 		}
+ 		
+ 		//
+ 		index = 0;
+ 		int offSet = 0;
+ 		
+ 		for(int iVal : items) {
+ 			
+ 			if(index == savedPos) {
+ 				index++;
+ 	 			offSet++;
+ 	 			continue;
+ 			}
+ 			
+ 			if(index == intR) {
+ 				offSet = index + 1;
+ 			}
+ 			
+ 			if(offSet > intR) {
+ 				newArray[offSet] = iVal > 0? iVal-1 : iVal;
+ 				
+ 			}else {
+ 				newArray[offSet] = iVal;
+ 			}
+	 			
 			index++;
-		}
-		//Puting back the values of the array
-		
-		
-		return arrRemoved;
-	}
-
+ 			offSet++;
+ 			
+ 		}
+ 		
+ 		
+ 		return newArray;
+ 		
+ 	}
 	
-	int[] fisrtInteration(int[] arr, int x) {
-		int[] tempArr = new int[x];
-		
-		//New size of the array
-		
-		int largest = - 1;
-		
-		for(int i = 0; i < x ;i++) {
-			if(arr[i] > arr[i] - 1) {
-				tempArr[i] = arr[i] - 1;			
-			}else {
-				tempArr[i] = arr[i];
-			}
-			
-			if (tempArr[i] > largest ) {
-				largest = tempArr[i];
-			}
-			
-			arr[i] = -1;
-		}
-		
-		//Recreating the array
-		int[] newArray = new int[arr.length-1];
-		
-		for(int i = 0; i < arr.length; i++ ) {
-			int posBack = (arr.length - i)-1; 
-			
-			//Put the values not changed first
-			if(arr[posBack] != -1) {
-				newArray[i] = arr[posBack]; 
-			
-			//See if is possible to add the value
-		    //Remove the largest
-			}else if(tempArr[i-1] != largest ) {
-				newArray[i] = tempArr[i-1];
-			}
-		}
-		
-		return newArray;
-		
-	}
-	
+ 	
 	int[] findPositions(int[] arr, int x) {
+		
+		//Save this array into list, just for fun
+		for(int val : arr) {
+			this.savedList.add(val);
+		}
+		
 		// Write your code here
+		int[] tempArray = arr;
+		for(int i=0; i<x; i++) {
+			tempArray = getResizedList(tempArray,x,i);
+			System.out.println(Arrays.toString(tempArray));
+		}
+		
+		return tempArray;
 
-		// First a I ll loop throw the interation
-		//for (int i = 0; i < x; i++) {
-		return	fisrtInteration(arr, x);
-		//}
-
-		//return new int[1];
 	}
 
 	// These are the tests we use to determine if the solution is correct.

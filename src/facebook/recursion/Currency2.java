@@ -1,64 +1,34 @@
 package facebook.recursion;
 
-public class Currency {
+public class Currency2 {
 
-	int[][] moneys;
-	int sTarget;
-
-	boolean fillArray(int coin, int index) {
-		//
-
-		for (int i = 0; i < moneys[index].length; i++) {
-
-			if (i == 0) {
-				this.moneys[index][0] = 1;
-				continue;
-			}
-
-			int delCoin = this.moneys[index - 1][i];
-			if (i >= coin) {
-				int ref = i - coin;
-				this.moneys[index][i] = delCoin + this.moneys[index][ref];
-
-			} else if (i != 0) {
-				this.moneys[index][i] = delCoin;
-
-			}
-
-			if (i == sTarget && this.moneys[index][i] != 0) {
-				//return true;
-			}
-
+	
+	
+	private int match(int value, int[] coins, int index) {
+		if(value< 0) {
+			return 0;
+		}else if (value == 0) {
+			return 1;
 		}
-		return false;
+		
+		int count =0 ;
+		int pos = index;
+		
+		while (pos < coins.length ) {
+			count += match(value - coins[pos], coins, pos);
+			pos++;
+		}
+		
+		return count;
+		
 	}
 
 	boolean canGetExactChange(int targetMoney, int[] denominations) {
-
-		//Check for divisors
-		for (int value : denominations) {
-			if (targetMoney % value == 0) {
-				//return true;
-			}
+		if (match(targetMoney, denominations, 0) == 0) {
+			return false;
+		}else {
+			return true;
 		}
-
-		this.moneys = new int[denominations.length + 1][targetMoney + 1];
-		this.sTarget = targetMoney;
-
-		int coinIndex = 1;
-		boolean ret = false;
-
-		for (int coin : denominations) {
-			ret = this.fillArray(coin, coinIndex);
-
-			if (ret) {
-				return true;
-			}
-			coinIndex++;
-
-		}
-
-		return false;
 
 	}
 
@@ -87,7 +57,7 @@ public class Currency {
 	}
 
 	public void run() {
-/*
+
 		int target_0 = 95;
 		int arr_0[] = { 5, 10, 25, 100, 200 };
 		boolean expected_0 = true;
@@ -111,7 +81,7 @@ public class Currency {
 		boolean expected_3 = true;
 		boolean output_3 = canGetExactChange(target_3, arr_3);
 		check(expected_3, output_3);
-		*/
+		
 		int target_4 = 5;
 		int arr_4[] = { 1,2, 3 };
 		boolean expected_4 = true;
@@ -123,6 +93,6 @@ public class Currency {
 	}
 
 	public static void main(String[] args) {
-		new Currency().run();
+		new Currency2().run();
 	}
 }
