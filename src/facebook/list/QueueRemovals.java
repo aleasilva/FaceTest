@@ -11,86 +11,54 @@ public class QueueRemovals {
  	int[] getResizedList(int[] arr, int size, int intR) {
  		
  		//Reducing the list
- 		List<Integer> items = new ArrayList<Integer>();
+ 		int[] arrTemp; 
+ 		int[] arrayToAdd;
+ 		int[] newArray = new int[size];
  		
- 		//int newSize = Integer.min(size, arr.length);
- 		int posToCheck = size - (arr.length - (intR+1));
- 		int x = savedList.size() - intR;
- 		
- 		boolean l = false;
- 		
- 		if(x >= size) {
- 			l = true;
+ 		if( savedList.size() >= size + intR) {
+ 			arrTemp = Arrays.copyOfRange(arr,0,size); 	
+ 			arrayToAdd = Arrays.copyOfRange(arr,0,size-1);
+ 			
+ 		}else {
+ 			arrTemp = Arrays.copyOfRange(arr,0,size-intR);
+ 			arrayToAdd = Arrays.copyOfRange(arr,0,size-1);
  		}
+ 		System.out.println("Para avaliar -> " + Arrays.toString(arrTemp));
+
+ 		//Discover the biggest value
+ 		Arrays.sort(arrTemp);
+ 		int bigValue = arrTemp[arrTemp.length - 1];
+ 		int oriItem = savedList.indexOf(bigValue)+1;
  		
- 		//System.out.println(posToCheck);
- 		
- 		int savBigVal = -1;
- 		int itemRem = -1;
- 		
- 		boolean p = false;
- 		
- 		for(int item = 0; item < arr.length; item++) {
- 			int value = arr[item];
- 			
- 			if(item == size) {
- 				break;
- 			}
- 			
- 			items.add(value);
- 			
- 			
- 			if(l) {
- 				if(value > savBigVal    ) {
- 					savBigVal = value;
- 					itemRem = value;
- 				}
- 				
- 			}else {
- 				if(item >= posToCheck && value > savBigVal   ) {
- 					savBigVal = value ;
- 					itemRem = savBigVal;
- 					p = true;
- 				}
- 				
- 			}
- 			
- 			
- 			
- 		}
- 		
- 		if(p) {
- 			savBigVal += intR;
- 		}
- 		
- 		//Creating new Array
- 		int[] nArray = new int[size];
- 		nArray[intR] = this.savedList.indexOf(savBigVal)+1;
- 		items.remove(items.indexOf(itemRem));
- 		
- 		
- 		int index = 0;
+ 		//Remount the values
  		int offSet = 0;
  		
- 		for(int iVal : items) {
+ 		for(int i = 0; i < arrayToAdd.length ; i++) {
  			
- 			if(index == intR) {
- 				offSet = index + 1;
- 			}
+ 			if(i == intR) {
+ 				newArray[intR] = oriItem;
+ 				offSet++;
+ 			} 
  			
- 			if(offSet > intR) {
- 				nArray[offSet] = iVal > 0? iVal-1 : iVal;
+ 			
+ 			if(i > intR) {
  				
- 			}else {
- 				nArray[offSet] = arr[index];
+ 				if (arrayToAdd[i] > 0) {
+ 					newArray[offSet] = arrayToAdd[i] -1;
+ 				}else {
+ 					newArray[offSet] = arrayToAdd[i];
+ 				}
+ 				
+ 			} else {
+ 				newArray[offSet] = arrayToAdd[i];
  			}
-
+ 			
+ 			
  			offSet++;
- 			index++;
- 		
+ 			
  		}
  		
- 		return nArray;
+ 		return newArray;
  		
  		
  	}
