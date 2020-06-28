@@ -6,7 +6,8 @@ import java.util.*;
 public class QueueRemovals {
 	
 	List<Integer> savedList = new ArrayList<Integer>();
-	
+	int[] newRet ;
+ 	
 	
  	int[] getResizedList(int[] arr, int size, int intR) {
  		
@@ -39,6 +40,8 @@ public class QueueRemovals {
  			
  			//arrayToAdd = Arrays.copyOfRange(arrTemp,0,size-1);
  				
+ 			
+ 			
  		}else {
  			arrTemp = Arrays.copyOfRange(arr,intR,size);
  			arrayToAdd = Arrays.copyOfRange(arr,0,size-1);
@@ -48,7 +51,7 @@ public class QueueRemovals {
  			oriItem = savedList.indexOf(bigValue)+1;
  		}
  		
- 
+ 		this.newRet[intR] = oriItem;
  		
  		//Remount the values
  		int offSet = 0;
@@ -87,6 +90,7 @@ public class QueueRemovals {
 		
 		// Write your code here
 		int[] tempArray = arr;
+		this.newRet = new int[x];
 		
 		for(int i=0; i < x; i++) {
 			tempArray = getResizedList(tempArray,x,i);
