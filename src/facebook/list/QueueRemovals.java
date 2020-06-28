@@ -70,8 +70,12 @@ public class QueueRemovals {
  		for(int i = 0; i < arr.length; i++) {
  			
  			if(i > intR && arr[i] > 0) {
+ 				
  				arr[i] = arr[i] - 1;
+ 				
  			}
+ 			
+ 			this.arraySaved[i][this.VAL_ATU] = arr[i];
  			
  		}
  		
@@ -82,7 +86,7 @@ public class QueueRemovals {
  		int[] workArr;
  		int newValue;
  		
- 		//For the first and second interation when the array is bigger
+ 		//For the first interation when the array is bigger
  		if(arr.length > size && intR == 0 ) {
  			
  			workArr = Arrays.copyOfRange(arr, 0, size);
@@ -92,9 +96,7 @@ public class QueueRemovals {
  			workArr = removeItemFromArray(workArr, valRemove);
  			workArr = putItemOnArray(workArr, newValue, intR);
 
- 			//System.out.println("Input ->" + Arrays.toString(workArr));
  			computeArray(workArr, intR);
- 			//System.out.println("Output ->" + Arrays.toString(workArr));
  			
  		}else  {
  			workArr = arr;
