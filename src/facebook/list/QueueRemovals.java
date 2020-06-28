@@ -7,86 +7,124 @@ public class QueueRemovals {
 	
 	List<Integer> savedList = new ArrayList<Integer>();
 	int[] newRet ;
+ 	int[][] arraySaved;
+ 	int VAL_ORI = 0;
+ 	int VAL_ATU = 1;
  	
-	
- 	int[] getResizedList(int[] arr, int size, int intR) {
+ 	
+ 	private int findBigValue(int[] arr, int intR) {
+ 		int[] aOrder; 
  		
- 		//Reducing the list
- 		int[] arrTemp; 
- 		int[] arrayToAdd;
- 		int[] newArray = new int[size];
+ 		if (intR < arr.length) {
+ 			 aOrder = Arrays.copyOfRange(arr,intR,arr.length );
+ 		 }else {
+ 			 aOrder = arr;
+ 		 }
  		
- 		int bigValue;
- 		int oriItem;
+ 		Arrays.sort(aOrder);
  		
- 		if( savedList.size() >= size + intR) {
- 			arrTemp = Arrays.copyOfRange(arr,0,size); 	
- 			
- 			//Find the biggest
- 			Arrays.sort(arrTemp);
- 			bigValue = arrTemp[arrTemp.length - 1] ;
- 			oriItem = savedList.indexOf(bigValue)+1;
- 			
- 			arrayToAdd = new int[arrTemp.length - 1];
- 			//Remove the biggest
- 			int index = 0;
- 			for(int val : arrTemp) {
- 				if(val != bigValue) {
- 					arrayToAdd[index] = val;
- 					index++;
- 				}
- 				
- 			}
- 			
- 			//arrayToAdd = Arrays.copyOfRange(arrTemp,0,size-1);
- 				
- 			
- 			
- 		}else {
- 			arrTemp = Arrays.copyOfRange(arr,intR,size);
- 			arrayToAdd = Arrays.copyOfRange(arr,0,size-1);
- 			
- 			Arrays.sort(arrTemp);
- 			bigValue = arrTemp[arrTemp.length - 1] + intR;
- 			oriItem = savedList.indexOf(bigValue)+1;
- 		}
+ 		return aOrder[aOrder.length-1];
  		
- 		this.newRet[intR] = oriItem;
+ 	}
  		
- 		//Remount the values
+ 	private int[] removeItemFromArray(int[] arr, int val) {
+ 		int[] tmpArray = new int[arr.length - 1];
+ 		
  		int offSet = 0;
- 		
- 		for(int i = 0; i < arrayToAdd.length ; i++) {
+ 		for(int i = 0; i < arr.length; i++) {
  			
- 			if(i < intR) {
- 				newArray[i] = arr[i];
- 			}else if (i == intR) {
- 				newArray[intR] = oriItem;
+ 			if(arr[i] != val ) {
+ 				tmpArray[offSet] = arr[i];
  				offSet++;
- 			} else {
- 			
-	 			if (arrayToAdd[i] > 0 ) {
-					newArray[offSet] = arrayToAdd[i] -1;
-				}else {
-					newArray[offSet] = arrayToAdd[i];
-				}
  			}
- 			offSet++;
  			
  		}
  		
- 		return newArray;
+ 		return tmpArray;
  		
+ 	}
+ 	
+ 	private int[] putItemOnArray(int[] arr, int val, int pos) {
+ 		int[] tmpArray = new int[arr.length+1];
+ 		
+ 		int offSet = 0;
+	 	for(int i = 0; i < arr.length; i++) {
+	 		
+	 		if(i == pos ) {
+	 			tmpArray[offSet] = val;
+	 			offSet++;
+	 			tmpArray[offSet] = arr[i];
+	 		}else {
+	 			tmpArray[offSet] = arr[i];
+	 		}
+	 		
+	 		offSet++;
+	 	}
+	 	
+	 	return tmpArray;
+ 		
+ 	}
+ 	
+ 	private void computeArray(int[] arr, int intR) {
+ 		
+ 		for(int i = 0; i < arr.length; i++) {
+ 			
+ 			if(i > intR && arr[i] > 0) {
+ 				arr[i] = arr[i] - 1;
+ 			}
+ 			
+ 		}
+ 		
+ 		
+ 	}
+	
+ 	int[] getResizedList(int[] arr, int size, int intR) {	
+ 		int[] workArr;
+ 		int newValue;
+ 		
+ 		//For the first and second interation when the array is bigger
+ 		if(arr.length > size && intR == 0 ) {
+ 			
+ 			workArr = Arrays.copyOfRange(arr, 0, size);
+ 			int valRemove = findBigValue(workArr, intR);
+ 			newValue = savedList.indexOf(valRemove)+1;
+ 			
+ 			workArr = removeItemFromArray(workArr, valRemove);
+ 			workArr = putItemOnArray(workArr, newValue, intR);
+
+ 			//System.out.println("Input ->" + Arrays.toString(workArr));
+ 			computeArray(workArr, intR);
+ 			//System.out.println("Output ->" + Arrays.toString(workArr));
+ 			
+ 		}else  {
+ 			workArr = arr;
+ 			int valRemove = findBigValue(workArr, intR -1);
+ 			newValue = savedList.indexOf(valRemove)+1;
+ 			
+ 			workArr = removeItemFromArray(workArr, valRemove);
+ 			computeArray(workArr, -1);
+ 			
+ 		}
+ 		
+ 		this.newRet[intR] = newValue; 
+ 				
+ 		return workArr;
  		
  	}
 	
  	
 	int[] findPositions(int[] arr, int x) {
+		this.arraySaved = new int[arr.length][2];
+		
 		
 		//Save this array into list, just for fun
-		for(int val : arr) {
-			this.savedList.add(val);
+		for(int i = 0; i < arr.length;i++) {
+			this.savedList.add(arr[i]);
+			this.arraySaved[i][VAL_ORI] = arr[i];
+			this.arraySaved[i][VAL_ATU] = arr[i];
+			
 		}
+		
 		
 		// Write your code here
 		int[] tempArray = arr;
@@ -97,7 +135,7 @@ public class QueueRemovals {
 			System.out.println(i+1+ "-> " + Arrays.toString(tempArray));
 		}
 		
-		return tempArray;
+		return this.newRet;
 
 	}
 
