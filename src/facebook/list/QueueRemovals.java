@@ -15,45 +15,59 @@ public class QueueRemovals {
  		int[] arrayToAdd;
  		int[] newArray = new int[size];
  		
+ 		int bigValue;
+ 		int oriItem;
+ 		
  		if( savedList.size() >= size + intR) {
  			arrTemp = Arrays.copyOfRange(arr,0,size); 	
+ 			
+ 			//Find the biggest
+ 			Arrays.sort(arrTemp);
+ 			bigValue = arrTemp[arrTemp.length - 1] ;
+ 			oriItem = savedList.indexOf(bigValue)+1;
+ 			
+ 			arrayToAdd = new int[arrTemp.length - 1];
+ 			//Remove the biggest
+ 			int index = 0;
+ 			for(int val : arrTemp) {
+ 				if(val != bigValue) {
+ 					arrayToAdd[index] = val;
+ 					index++;
+ 				}
+ 				
+ 			}
+ 			
+ 			//arrayToAdd = Arrays.copyOfRange(arrTemp,0,size-1);
+ 				
+ 		}else {
+ 			arrTemp = Arrays.copyOfRange(arr,intR,size);
  			arrayToAdd = Arrays.copyOfRange(arr,0,size-1);
  			
- 		}else {
- 			arrTemp = Arrays.copyOfRange(arr,0,size-intR);
- 			arrayToAdd = Arrays.copyOfRange(arr,0,size-1);
+ 			Arrays.sort(arrTemp);
+ 			bigValue = arrTemp[arrTemp.length - 1] + intR;
+ 			oriItem = savedList.indexOf(bigValue)+1;
  		}
- 		System.out.println("Para avaliar -> " + Arrays.toString(arrTemp));
-
- 		//Discover the biggest value
- 		Arrays.sort(arrTemp);
- 		int bigValue = arrTemp[arrTemp.length - 1];
- 		int oriItem = savedList.indexOf(bigValue)+1;
+ 		
+ 
  		
  		//Remount the values
  		int offSet = 0;
  		
  		for(int i = 0; i < arrayToAdd.length ; i++) {
  			
- 			if(i == intR) {
+ 			if(i < intR) {
+ 				newArray[i] = arr[i];
+ 			}else if (i == intR) {
  				newArray[intR] = oriItem;
  				offSet++;
- 			} 
- 			
- 			
- 			if(i > intR) {
- 				
- 				if (arrayToAdd[i] > 0) {
- 					newArray[offSet] = arrayToAdd[i] -1;
- 				}else {
- 					newArray[offSet] = arrayToAdd[i];
- 				}
- 				
  			} else {
- 				newArray[offSet] = arrayToAdd[i];
+ 			
+	 			if (arrayToAdd[i] > 0 ) {
+					newArray[offSet] = arrayToAdd[i] -1;
+				}else {
+					newArray[offSet] = arrayToAdd[i];
+				}
  			}
- 			
- 			
  			offSet++;
  			
  		}
@@ -74,7 +88,7 @@ public class QueueRemovals {
 		// Write your code here
 		int[] tempArray = arr;
 		
-		for(int i=0; i<x; i++) {
+		for(int i=0; i < x; i++) {
 			tempArray = getResizedList(tempArray,x,i);
 			System.out.println(i+1+ "-> " + Arrays.toString(tempArray));
 		}
